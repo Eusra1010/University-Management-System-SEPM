@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head(${title})}"></head>
+<body>
+<header th:replace="~{fragments/layout :: header}"></header>
+
+<!-- Add / edit form for a student, teacher or admin -->
+<main class="container narrow">
+    <h1 th:text="${title}">New student</h1>
+
+    <form th:action="@{${action}}" th:object="${form}" method="post" class="card form">
+        <label>First name
+            <input type="text" th:field="*{firstName}" required>
+            <span class="field-error" th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}"></span>
+        </label>
+        <label>Last name
+            <input type="text" th:field="*{lastName}" required>
+            <span class="field-error" th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}"></span>
+        </label>
+        <label>Email <span class="muted">(optional)</span>
+            <input type="email" th:field="*{email}">
+            <span class="field-error" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></span>
+        </label>
+
+        <!-- Only when creating: the login account -->
+        <div th:if="${creating}" class="login-box">
+            <label>Username
+                <input type="text" th:field="*{username}" required>
+                <span class="field-error" th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></span>
+            </label>
+            <label>Password
+                <input type="password" th:field="*{password}" required>
+                <span class="field-error" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></span>
+            </label>
+        </div>
+
+        <p th:unless="${creating}" class="muted">
+            Username: <code th:text="*{username}">username</code> (cannot be changed)
+            <input type="hidden" th:field="*{username}">
+        </p>
+
+        <div class="form-actions">
+            <button type="submit" class="btn">Save</button>
+            <a class="btn btn-light" th:href="@{${backUrl}}">Cancel</a>
+        </div>
+    </form>
+</main>
+</body>
+</html>

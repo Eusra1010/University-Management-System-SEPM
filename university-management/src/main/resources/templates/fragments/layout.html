@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<!-- Shared pieces used by every page: <head>, top bar, messages -->
+
+<head th:fragment="head(title)">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title th:text="${title} + ' | University'">University</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+
+<body>
+
+<header th:fragment="header" class="topbar">
+    <a class="brand" th:href="@{/}">University</a>
+
+    <nav sec:authorize="isAuthenticated()">
+        <span sec:authorize="hasRole('ADMIN')">
+            <a th:href="@{/admin/students}">Students</a>
+            <a th:href="@{/admin/teachers}">Teachers</a>
+            <a th:href="@{/admin/admins}">Admins</a>
+        </span>
+        <a sec:authorize="hasRole('TEACHER')" th:href="@{/teacher/profile}">My profile</a>
+        <a sec:authorize="hasRole('STUDENT')" th:href="@{/student/profile}">My profile</a>
+        <a th:href="@{/account/password}">Change password</a>
+    </nav>
+
+    <div class="user" sec:authorize="isAuthenticated()">
+        <span class="badge" sec:authorize="hasRole('ADMIN')">Admin</span>
+        <span class="badge" sec:authorize="hasRole('TEACHER')">Teacher</span>
+        <span class="badge" sec:authorize="hasRole('STUDENT')">Student</span>
+        <strong sec:authentication="name">username</strong>
+        <!-- Logout must be a POST (with the CSRF token, which th:action adds automatically) -->
+        <form th:action="@{/logout}" method="post">
+            <button type="submit" class="btn btn-light btn-small">Log out</button>
+        </form>
+    </div>
+</header>
+
+<div th:fragment="messages">
+    <p class="alert success" th:if="${message}" th:text="${message}">Saved.</p>
+    <p class="alert error" th:if="${error}" th:text="${error}">Error.</p>
+</div>
+
+</body>
+</html>

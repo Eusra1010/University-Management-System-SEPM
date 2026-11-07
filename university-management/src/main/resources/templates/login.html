@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Log in')}"></head>
+<body class="login-page">
+
+<main class="login-card">
+    <h1>University</h1>
+    <p class="muted">Log in to continue</p>
+
+    <p class="alert error" th:if="${param.error}">Wrong username or password.</p>
+    <p class="alert success" th:if="${param.logout}">You have been logged out.</p>
+
+    <!-- Spring Security checks this form (POST /login) against the database, password with BCrypt -->
+    <form th:action="@{/login}" method="post" class="form">
+        <label>Username
+            <input type="text" name="username" required autofocus>
+        </label>
+        <label>Password
+            <input type="password" name="password" required>
+        </label>
+        <button type="submit" class="btn btn-block">Log in</button>
+    </form>
+
+    <details class="demo">
+        <summary>Demo accounts</summary>
+        <table>
+            <tr><td>Admin</td><td><code>admin</code></td><td><code>admin123</code></td></tr>
+            <tr><td>Teacher</td><td><code>teacher1</code></td><td><code>teacher123</code></td></tr>
+            <tr><td>Student</td><td><code>student1</code></td><td><code>student123</code></td></tr>
+        </table>
+    </details>
+</main>
+
+</body>
+</html>

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head(${title})}"></head>
+<body>
+<header th:replace="~{fragments/layout :: header}"></header>
+
+<!-- One page for the Students, Teachers and Admins lists (the controller fills in title, basePath, people) -->
+<main class="container">
+    <div class="page-head">
+        <h1 th:text="${title}">Students</h1>
+        <a class="btn" th:href="@{${basePath + '/new'}}" th:text="'+ Add ' + ${singular}">+ Add</a>
+    </div>
+
+    <div th:replace="~{fragments/layout :: messages}"></div>
+
+    <p class="muted card" th:if="${#lists.isEmpty(people)}">Nothing here yet.</p>
+
+    <div class="card table-wrap" th:unless="${#lists.isEmpty(people)}">
+        <table>
+            <thead>
+            <tr><th>ID</th><th>Name</th><th>Email</th><th>Username</th><th></th></tr>
+            </thead>
+            <tbody>
+            <tr th:each="p : ${people}">
+                <td th:text="${p.id()}">1</td>
+                <td th:text="${p.firstName() + ' ' + p.lastName()}">Full name</td>
+                <td th:text="${p.email() ?: '-'}">email</td>
+                <td><code th:text="${p.username()}">username</code></td>
+                <td class="actions">
+                    <a class="btn btn-light btn-small" th:href="@{${basePath + '/' + p.id() + '/edit'}}">Edit</a>
+                    <!-- no Delete button on your own account -->
+                    <form th:unless="${p.username() == #authentication.name}"
+                          th:action="@{${basePath + '/' + p.id() + '/delete'}}" method="post"
+                          onsubmit="return confirm('Delete this person and their login?');">
+                        <button type="submit" class="btn btn-danger btn-small">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</main>
+</body>
+</html>
