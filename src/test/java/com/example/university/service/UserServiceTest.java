@@ -44,7 +44,8 @@ class UserServiceTest {
         assertEquals("rafi", user.getUsername());
         assertEquals("$2a$10$hashedValue", user.getPassword());   // the hash is stored ...
         assertNotEquals("rafi123", user.getPassword());           // ... never the plain password
-        assertEquals(Role.STUDENT, user.getRole());
+        //assertEquals(Role.STUDENT, user.getRole());
+        assertEquals(Role.ADMIN, user.getRole());   // wrong on purpose, to show a failing test
         verify(passwordEncoder).encode("rafi123");
     }
 
